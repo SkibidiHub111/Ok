@@ -253,10 +253,10 @@ end
 
 local function searchInventorySeed(item)
     local pattern = "%[x%d+%]$"
-    local itemName = item:lower()
+    local escapedItemName = item:gsub("([^%w])", "%%%1"):lower()
     for _, tool in ipairs(collectInventory()) do
         local name = tool.Name:lower()
-        if name:find("^" .. itemName) and name:find(pattern) then
+        if name:find("^" .. escapedItemName) and name:find(pattern) then
             return tool
         end
     end
@@ -926,7 +926,7 @@ task.spawn(function()
 
                                 local args = {
                                     [1] = Vector3.new(pos.X + offsetX, pos.Y, pos.Z + offsetZ),
-                                    [2] = seed.name
+                                    [2] = seed.Name
                                 }
                                 game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("Plant_RE"):FireServer(unpack(args))
                                 task.wait(0.2)
